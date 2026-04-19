@@ -15,7 +15,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "MiTime needs your location to calculate your personal solar time based on your longitude."
+        "NSLocationWhenInUseUsageDescription": "MiTime needs your location to calculate your personal solar time based on your longitude.",
+        "NSUserNotificationsUsageDescription": "MiTime uses notifications to fire your solar time alarms."
       }
     },
     "android": {
