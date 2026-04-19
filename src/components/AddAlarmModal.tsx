@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Modal, View, Text, TextInput, TouchableOpacity,
-  StyleSheet, Platform,
+  StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Alarm } from '../models/Alarm';
@@ -39,62 +39,75 @@ export function AddAlarmModal({ visible, onClose, onAdd }: Props) {
 
   return (
     <Modal visible={visible} transparent animationType="slide">
-      <View style={styles.overlay}>
-        <View style={styles.sheet}>
-          <Text style={styles.title}>New MiTime Alarm</Text>
-          <Text style={styles.hint}>Time is in your personal solar time</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.overlay}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={0}
+          >
+            <TouchableWithoutFeedback>
+              <View style={styles.sheet}>
+                <Text style={styles.title}>New MiTime Alarm</Text>
+                <Text style={styles.hint}>Time is in your personal solar time</Text>
 
-          <View style={styles.timeRow}>
-            <TextInput
-              style={styles.timeInput}
-              value={hour}
-              onChangeText={setHour}
-              keyboardType="number-pad"
-              maxLength={2}
-              selectTextOnFocus
-              placeholderTextColor="#555"
-            />
-            <Text style={styles.colon}>:</Text>
-            <TextInput
-              style={styles.timeInput}
-              value={minute}
-              onChangeText={setMinute}
-              keyboardType="number-pad"
-              maxLength={2}
-              selectTextOnFocus
-              placeholderTextColor="#555"
-            />
-            <View style={styles.ampmToggle}>
-              {(['AM', 'PM'] as const).map(v => (
-                <TouchableOpacity
-                  key={v}
-                  style={[styles.ampmBtn, ampm === v && styles.ampmActive]}
-                  onPress={() => setAmpm(v)}
-                >
-                  <Text style={[styles.ampmText, ampm === v && styles.ampmTextActive]}>{v}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+                <View style={styles.timeRow}>
+                  <TextInput
+                    style={styles.timeInput}
+                    value={hour}
+                    onChangeText={setHour}
+                    keyboardType="number-pad"
+                    maxLength={2}
+                    selectTextOnFocus
+                    placeholderTextColor="#555"
+                    returnKeyType="next"
+                  />
+                  <Text style={styles.colon}>:</Text>
+                  <TextInput
+                    style={styles.timeInput}
+                    value={minute}
+                    onChangeText={setMinute}
+                    keyboardType="number-pad"
+                    maxLength={2}
+                    selectTextOnFocus
+                    placeholderTextColor="#555"
+                    returnKeyType="next"
+                  />
+                  <View style={styles.ampmToggle}>
+                    {(['AM', 'PM'] as const).map(v => (
+                      <TouchableOpacity
+                        key={v}
+                        style={[styles.ampmBtn, ampm === v && styles.ampmActive]}
+                        onPress={() => setAmpm(v)}
+                      >
+                        <Text style={[styles.ampmText, ampm === v && styles.ampmTextActive]}>{v}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
 
-          <TextInput
-            style={styles.labelInput}
-            placeholder="Label (optional)"
-            placeholderTextColor="#555"
-            value={label}
-            onChangeText={setLabel}
-          />
+                <TextInput
+                  style={styles.labelInput}
+                  placeholder="Label (optional)"
+                  placeholderTextColor="#555"
+                  value={label}
+                  onChangeText={setLabel}
+                  returnKeyType="done"
+                  onSubmitEditing={handleAdd}
+                />
 
-          <View style={styles.actions}>
-            <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
-              <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.addBtn} onPress={handleAdd}>
-              <Text style={styles.addText}>Add Alarm</Text>
-            </TouchableOpacity>
-          </View>
+                <View style={styles.actions}>
+                  <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.addBtn} onPress={handleAdd}>
+                    <Text style={styles.addText}>Add Alarm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
