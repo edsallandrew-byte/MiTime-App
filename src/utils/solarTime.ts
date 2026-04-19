@@ -48,8 +48,8 @@ export function getStandardTimeForMiTime(
     candidate.setDate(candidate.getDate() + dayOffset);
     candidate.setHours(0, 0, 0, 0);
 
-    // Build UTC ms for midnight of candidate day, then add MiTime hours/minutes
-    const utcMidnight = candidate.getTime() + candidate.getTimezoneOffset() * 60000;
+    // UTC midnight of the local calendar date
+    const utcMidnight = Date.UTC(candidate.getFullYear(), candidate.getMonth(), candidate.getDate());
     const miTimeTargetUtc = utcMidnight
       + miTimeHour * 3600000
       + miTimeMinute * 60000;
