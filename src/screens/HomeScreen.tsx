@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { useLocation } from '../hooks/useLocation';
 import { useSolarTime } from '../hooks/useSolarTime';
 import { MiTimeClock } from '../components/MiTimeClock';
+import { ComparisonView } from '../components/ComparisonView';
 
 export function HomeScreen() {
   const location = useLocation();
@@ -11,7 +12,10 @@ export function HomeScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.brand}>MiTime</Text>
 
       {location.status === 'loading' && (
@@ -29,32 +33,41 @@ export function HomeScreen() {
       )}
 
       {location.status === 'ready' && (
-        <MiTimeClock
-          miTime={miTime}
-          longitude={location.longitude}
-          latitude={location.latitude}
-        />
+        <>
+          <MiTimeClock
+            miTime={miTime}
+            longitude={location.longitude}
+            latitude={location.latitude}
+          />
+          <View style={styles.separator} />
+          <ComparisonView longitude={location.longitude} />
+        </>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#0d0d0d',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
-    padding: 24,
+    paddingVertical: 100,
+    paddingHorizontal: 0,
   },
   brand: {
-    position: 'absolute',
-    top: 64,
     fontSize: 28,
     fontWeight: '700',
     color: '#f4a261',
     letterSpacing: 4,
+    marginBottom: 8,
+  },
+  separator: {
+    width: '80%',
+    height: 1,
+    backgroundColor: '#1e1e1e',
   },
   message: {
     color: '#888',
@@ -65,5 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     lineHeight: 22,
+    paddingHorizontal: 32,
   },
 });
