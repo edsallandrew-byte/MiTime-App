@@ -31,6 +31,49 @@ export function formatMiTime(date: Date): string {
   return `${String(hour).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} ${ampm}`;
 }
 
+/**
+ * Given a desired MiTime (hour/minute in solar time) and the user's longitude,
+ * returns the standard (device) clock time to set an alarm for the next occurrence.
+ * This shifts daily because the Equation of Time correction changes throughout the year.
+ */
+export function getStandardTimeForMiTime(
+  miTimeHour: number,
+  miTimeMinute: number,
+  longitude: number,
+  referenceDate: Date = new Date()
+): Date {
+  // Try today and tomorrow, pick the next future occurrence
+  for (let dayOffset = 0; dayOffset <= 1; dayOffset++) {
+    const candidate = new Date(referenceDate);
+    candidate.setDate(candidate.getDate() + dayOffset);
+    candidate.setHours(0, 0, 0, 0);
+
+    // Build UTC ms for midnight of candidate day, then add MiTime hours/minutes
+    const utcMidnight = candidate.getTime() + candidate.getTimezoneOffset() * 60000;
+    const miTimeTargetUtc = utcMidnight
+      + miTimeHour * 3600000
+      + miTimeMinute * 60000;
+
+    // Reverse the solar offset to find device time
+    const longitudeOffsetMs = (longitude / 15) * 3600000;
+    const eotMs = equationOfMinutes(new Date(miTimeTargetUtc)) * 60000;
+    const deviceMs = miTimeTargetUtc - longitudeOffsetMs - eotMs;
+    const deviceDate = new Date(deviceMs);
+
+    if (deviceDate > referenceDate) return deviceDate;
+  }
+  // Fallback
+  return referenceDate;
+}
+
+export function formatStandardAlarmTime(date: Date): string {
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
 export function getMiTimeOffset(longitude: number): string {
   const totalMinutes = longitude * 4; // 4 min per degree
   const sign = totalMinutes >= 0 ? '+' : '-';

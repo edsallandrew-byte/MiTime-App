@@ -49,6 +49,7 @@ export function AlarmScreen() {
               <AlarmItem
                 key={alarm.id}
                 alarm={alarm}
+                longitude={longitude ?? 0}
                 onToggle={toggleAlarm}
                 onDelete={deleteAlarm}
               />
