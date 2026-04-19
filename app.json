@@ -18,23 +18,32 @@
       "buildNumber": "1",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "MiTime needs your location to calculate your personal solar time based on your longitude.",
-        "NSUserNotificationsUsageDescription": "MiTime uses notifications to fire your solar time alarms."
+        "NSUserNotificationsUsageDescription": "MiTime uses notifications to fire your solar time alarms.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
+      "package": "com.mitime.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0d0d0d"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": ""
+        "projectId": "ad672ddb-1f02-4cea-ab62-6c3ee8a26e6c"
       }
     }
   }
