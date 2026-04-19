@@ -16,7 +16,7 @@ function equationOfMinutes(date: Date): number {
 }
 
 export function getMiTime(longitude: number, date: Date = new Date()): Date {
-  const utcMs = date.getTime() + date.getTimezoneOffset() * 60000;
+  const utcMs = date.getTime(); // getTime() is already UTC milliseconds
   const longitudeOffsetMs = (longitude / 15) * 3600000;
   const eotMs = equationOfMinutes(date) * 60000;
   return new Date(utcMs + longitudeOffsetMs + eotMs);

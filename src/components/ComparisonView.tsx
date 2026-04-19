@@ -44,10 +44,10 @@ export function ComparisonView({ longitude }: Props) {
   }, []);
 
   const miTime = getMiTime(longitude, now);
-  const diffMs = miTime.getTime() - Date.UTC(
-    now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-    now.getHours(), now.getMinutes(), now.getSeconds()
-  );
+  // Compare seconds-from-midnight for both times to get the human-visible difference
+  const miSec = miTime.getUTCHours() * 3600 + miTime.getUTCMinutes() * 60 + miTime.getUTCSeconds();
+  const stdSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  const diffMs = (miSec - stdSec) * 1000;
 
   return (
     <View style={styles.container}>
